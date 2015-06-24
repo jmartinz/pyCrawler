@@ -7,12 +7,20 @@ from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 
 
-
+# voy a volcar a fichero el texto en crudo de la tabla para testear como extraer la información con bs4
 def extraeContratos(table):
-#https://adesquared.wordpress.com/2013/06/16/using-python-beautifulsoup-to-scrape-a-wikipedia-table/  
+    f = open('tablaContratos.txt', 'a')
+    for row in table.findAll("tr"):
+      f.write(row.encode("UTF-8")+ "\n")
+    f.close()
+    
+    
+def extraeContratosDirect(table):    
+    #https://adesquared.wordpress.com/2013/06/16/using-python-beautifulsoup-to-scrape-a-wikipedia-table/  
     f = open('output.csv', 'a')
     
-    expediente = ""
+    num_expediente = ""
+    desc_expediente =""
     tipoContrato = ""
     estado = ""
     importe = ""
@@ -25,7 +33,7 @@ def extraeContratos(table):
 	    #print len(cells)
 	    #For each "tr", assign each "td" to a variable.
 	    if len(cells) == 6:
-		expediente = cells[0].find(text=True)
+		expediente = cells[0].findAll(text=True)
 	      #print(expediente)  
 		tipoContrato = cells[1].find(text=True)
 		estado = cells[2].find(text=True)
@@ -83,7 +91,7 @@ fDesde.send_keys("01-01-2014")
 
 # y 31/12/2014
 fHasta = driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:textMaxFecAnuncioMAQ')
-fHasta.send_keys("31-12-2014")
+fHasta.send_keys("24-06-2015")
 
 # pulsa el bot´on de buscar
 driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:button1').click()
@@ -109,6 +117,7 @@ while True: # Se ejecuta siempre hasta que no exista el enlace "siguiente"
     
     tableExp = soup.find("table", { "id" : "myTablaBusquedaCustom" })
     
+
     extraeContratos(tableExp)
 
     expedientes_pag = [c.text for c in soup.findAll('td', {'class':'tdExpediente'})]
