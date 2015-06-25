@@ -35,11 +35,22 @@ class Contrato:
             self.organo = cells[5].findAll(text=True)
         
         # Buscamos las fechas por la clase de columna
+        self.Fecha={}
         fechas = row.find("td", {'class': 'tdFecha'})
-
+        diaFecha=""
         for fecha in fechas.findAll('div'):
-            print(fecha.find('span', {'class':'anchoTipoFecha'})).string
-        #print(fechas.prettify())
+            tipoFecha =fecha.find('span', {'class':'anchoTipoFecha'}).string
+            
+            # Busca la fecha
+            diaFecha= fecha.find('span', {'class':'textAlignLeft'})
+            if diaFecha is None:
+                diaFecha=""
+            else:
+                diaFecha=diaFecha.string
+
+            
+            self.Fecha[tipoFecha]=diaFecha
+#        print(fechas.prettify())
     
     
     
