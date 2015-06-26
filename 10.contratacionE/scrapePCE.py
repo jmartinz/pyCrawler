@@ -5,6 +5,8 @@
 from bs4 import BeautifulSoup
 import sys
 import cPickle as pickle
+import peewee
+from pce_db  import PceOrgano,  PceExpediente
 
 """ Clase que de cada linea de la tabla extraida de contratos
 obtiene los datos de cada contrato"""
@@ -55,7 +57,13 @@ class Contrato:
                 self.Fecha[tipoFecha]=diaFecha
     #        print(fechas.prettify())
 
+    def grabarBD(self):
 
+        expedienteBD= PceExpediente(desc_expediente = self.desc_expediente, 
+                                                           estado = self.estado,  
+                                                          importe = self.importe, 
+                                                          pce_expedientecol = self.num_expediente)
+        expedienteBD.save()
     
     
     
@@ -69,9 +77,12 @@ def main():
      
     # Envia sólo las líneas que son de contratos 
     for row in soup.findAll("tr",  {'class': ['rowClass1', 'rowClass2']}):
-        pickle.dump(Contrato(row),  open('save.p', 'ab')) 
-        #listaContratos.append(Contrato(row))
+        #pickle.dump(Contrato(row),  open('save.p', 'ab')) 
+        listaContratos.append(Contrato(row))
         #print(row.prettify())
+        
+    for contrato in listaContratos:
+        contrato.grabarBD()
         
     
     
