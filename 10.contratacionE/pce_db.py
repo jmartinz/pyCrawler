@@ -28,7 +28,7 @@ class PceExpediente(BaseModel):
     id_expediente = PrimaryKeyField()
     id_organo = ForeignKeyField(db_column='id_organo', null=True, rel_model=PceOrgano, to_field='id_organo')
     importe = CharField(null=True)
-    pce_expedientecol = CharField(null=True)
+    num_expediente = CharField(null=True)
     tipo_contrato_1 = CharField(null=True)
     tipo_contrato_2 = CharField(null=True)
 

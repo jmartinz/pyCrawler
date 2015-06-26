@@ -58,11 +58,19 @@ class Contrato:
     #        print(fechas.prettify())
 
     def grabarBD(self):
-
+ # ATENCION MAL LAS FECHAS
         expedienteBD= PceExpediente(desc_expediente = self.desc_expediente, 
+                                                           num_expediente = self.num_expediente,        
                                                            estado = self.estado,  
                                                           importe = self.importe, 
-                                                          pce_expedientecol = self.num_expediente)
+                                                          tipo_contrato_1 = self.tiposContrato[0], 
+                                                          tipo_contrato_2 = self.tiposContrato[1], 
+#                                                          fec_adj_prov = self.Fecha['Adj. Provisional:'],                 
+#                                                          fec_adj_provisional = self.Fecha['Presentación:'], 
+#                                                          fec_adjudicacion = self.Fecha['Adj. Definitiva:'], 
+#                                                          fec_formalizacion = self.Fecha['F. Formalización:'], 
+#                                                          fec_presentacion = self.Fecha['Presentación:']
+                                                          )
         expedienteBD.save()
     
     
