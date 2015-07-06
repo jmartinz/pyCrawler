@@ -21,7 +21,7 @@ class PceExpediente(BaseModel):
     desc_expediente = CharField(null=True)
     estado = CharField(null=True)
     fec_adj_prov = CharField(null=True)
-    fec_adj_provisional = CharField(null=True)
+    fec_adj_definitiva = CharField(null=True)
     fec_adjudicacion = CharField(null=True)
     fec_formalizacion = CharField(null=True)
     fec_presentacion = CharField(null=True)
