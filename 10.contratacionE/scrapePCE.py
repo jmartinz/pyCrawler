@@ -79,7 +79,7 @@ def main():
   
     # Lee el fichero con el html previamente guardado
     listaContratos=[]
-    exp_data = open('tablaContratos_2.txt','r').read()
+    exp_data = open('tablaContratos.txt','r').read()
 
     soup = BeautifulSoup(exp_data)
      
