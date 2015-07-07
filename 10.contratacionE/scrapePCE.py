@@ -4,8 +4,8 @@
 
 from bs4 import BeautifulSoup
 import sys
-import cPickle as pickle
-import peewee
+#import cPickle as pickle --> object serialization
+import peewee     #  object-relational mapper 
 from pce_db  import PceOrgano,  PceExpediente
 
 """ Clase que de cada linea de la tabla extraida de contratos
@@ -44,7 +44,12 @@ class Contrato:
             diaFecha=""
             
             for fecha in row.find("td", {'class': 'tdFecha'}).findAll('div'):
-                tipoFecha =fecha.find('span', {'class':'anchoTipoFecha'}).text
+                tFecha =fecha.find('span', {'class':'anchoTipoFecha'}).text
+                tipoFecha=u""
+                # Eliminamos signos de puntuación y espacios (no acentos)
+                for e in tFecha:
+                    if e.isalnum():
+                        tipoFecha += e
                 
                 # Busca la fecha
                 diaFecha= fecha.find('span', {'class':'textAlignLeft'})
@@ -58,18 +63,28 @@ class Contrato:
     #        print(fechas.prettify())
 
     def grabarBD(self):
- # ATENCION MAL LAS FECHAS
+        # comprueba si existe el órgano. Si es así lee el Id, si no... lo crea
+        try:
+            idOrgano= PceOrgano.get(PceOrgano.descripcion==self.organo).id_organo
+        except PceOrgano.DoesNotExist:
+            organo = PceOrgano.create(descripcion = self.organo, 
+                                                      url = self.organoURL      
+                                                      )
+            idOrgano= organo.id_organo
+        
+ # ATENCION MAL LAS FECHAS (Formato texto, no Fecha)
         expedienteBD= PceExpediente(desc_expediente = self.desc_expediente, 
                                                            num_expediente = self.num_expediente,        
                                                            estado = self.estado,  
+                                                           id_organo = idOrgano, 
                                                           importe = self.importe, 
                                                           tipo_contrato_1 = self.tiposContrato[0], 
                                                           tipo_contrato_2 = self.tiposContrato[1], 
-#                                                          fec_adj_prov = self.Fecha['Adj. Provisional:'],                 
-#                                                          fec_adj_provisional = self.Fecha['Presentación:'], 
-#                                                          fec_adjudicacion = self.Fecha['Adj. Definitiva:'], 
-#                                                          fec_formalizacion = self.Fecha['F. Formalización:'], 
-#                                                          fec_presentacion = self.Fecha['Presentación:']
+                                                          fec_adj_prov = self.Fecha[u'AdjProvisional'],                 
+                                                          fec_adj_definitiva = self.Fecha[u'AdjDefinitiva'], 
+                                                          fec_adjudicacion = self.Fecha[u'FAdjudicación'], 
+                                                          fec_formalizacion = self.Fecha[u'FFormalización'], 
+                                                          fec_presentacion = self.Fecha[u'Presentación']
                                                           )
         expedienteBD.save()
     
