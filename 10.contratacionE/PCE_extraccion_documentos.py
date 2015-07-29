@@ -19,25 +19,29 @@ expedientes =[]
 driver = webdriver.Firefox()
 
 #Carga página
-driver.get("https://contrataciondelestado.es")
+driver.get("https://contrataciondelestado.es/wps/portal/!ut/p/b1/lZDLDoIwEEU_aaYParssrwLxAVZQujEsjMH42Bi_30rcGCPq7CZz7pzkgoOWKC6kYBPYgDt3t37fXfvLuTs-die2PFlEUZpRlJbFSKdxXYvMrybwQOsB_DAah3xopdQh0YislqhFVUXK_0HFnvmARbwpmlLY3CDmWRpPaxKgoeI3_4jgxW_sjPhzwkRAkRhLn_mPAvqn_13wJb8GNyBjDQzAWMXjEgrz7HLaQeuxyVY3SaVzxXARLj1WlLNVaShB5LCCNoGTO6Z-VH7g3R2UoLEz/dl4/d5/L2dBISEvZ0FBIS9nQSEh/pw/Z7_AVEQAI930OBRD02JPMTPG21004/act/id=0/p=javax.servlet.include.path_info=QCPjspQCPbusquedaQCPBusquedaVIS_UOE.jsp/299420689304/-/")
 
 #Clica en búsqueda avanzada
 #driver.find_element_by_link_text('Búsqueda avanzada de licitaciones').click()
-driver.find_element_by_css_selector("div.paddingLeft1  a").click()
+#driver.find_element_by_css_selector("div.paddingLeft1  a").click()
 
 #Selecciona AGE
-el = driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:comboTipoAdminMAQ')
-for option in el.find_elements_by_tag_name('option'):
-    if (option.text).encode('utf-8') == 'Administración General del Estado':
-        option.click() # select() in earlier versions of webdriver
-        break
+#el = driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:comboTipoAdminMAQ')
+#for option in el.find_elements_by_tag_name('option'):
+#    if (option.text).encode('utf-8') == 'Administración General del Estado':
+#        option.click() # select() in earlier versions of webdriver
+#        break
 
 #Selecciona MSSSI
-nomAdmin = driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:comboadmins')      
-for option in nomAdmin.find_elements_by_tag_name('option'):
-    if (option.text).encode('utf-8') == 'Ministerio de Sanidad, Servicios Sociales e Igualdad':
-        option.click() # select() in earlier versions of webdriver
-        break
+driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:idSeleccionarOCLink').click()      # Organización contratante -> seleccionar
+driver.find_elements_by_class_name('tafelTreeopenable')[1].click()                                                                       # Selecciona AGE
+driver.find_element_by_id('tafelTree_maceoArbol_id_17').click()                                                                            # Selecciona Sanidad
+driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:botonAnadirMostrarPopUpArbolEO').click()     
+#nomAdmin = 
+#for option in nomAdmin.find_elements_by_tag_name('option'):
+#    if (option.text).encode('utf-8') == 'Ministerio de Sanidad, Servicios Sociales e Igualdad':
+#        option.click() # select() in earlier versions of webdriver
+#        break
       
 #Fecha publicacion entre 01/12/2014      
 fDesde = driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:textMinFecAnuncioMAQ2')

@@ -33,13 +33,13 @@ def extraeContratosDirect(table):
 	    #print len(cells)
 	    #For each "tr", assign each "td" to a variable.
 	    if len(cells) == 6:
-		expediente = cells[0].findAll(text=True)
+            expediente = cells[0].findAll(text=True)
 	      #print(expediente)  
-		tipoContrato = cells[1].find(text=True)
-		estado = cells[2].find(text=True)
-		importe = cells[3].find(text=True)
-		fechas = cells[4].find(text=True)
-		organo = cells[5].find(text=True)
+            tipoContrato = cells[1].find(text=True)
+            estado = cells[2].find(text=True)
+            importe = cells[3].find(text=True)
+            fechas = cells[4].find(text=True)
+            organo = cells[5].find(text=True)
 #		   
 		write_to_file = expediente + "," + tipoContrato + "," + estado + "," + importe + "," + fechas+ "," + organo + "\n"
 		#print write_to_file
