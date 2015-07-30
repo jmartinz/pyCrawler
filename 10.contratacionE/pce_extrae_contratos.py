@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import sys
 
 phantonPath = "/home/jmartinz/00.py/phantomjs/phantomjs"
+contratacionPage="https://contrataciondelestado.es/wps/portal/!ut/p/b1/lZDLDoIwEEU_aaYParssrwLxAVZQujEsjMH42Bi_30rcGCPq7CZz7pzkgoOWKC6kYBPYgDt3t37fXfvLuTs-die2PFlEUZpRlJbFSKdxXYvMrybwQOsB_DAah3xopdQh0YislqhFVUXK_0HFnvmARbwpmlLY3CDmWRpPaxKgoeI3_4jgxW_sjPhzwkRAkRhLn_mPAvqn_13wJb8GNyBjDQzAWMXjEgrz7HLaQeuxyVY3SaVzxXARLj1WlLNVaShB5LCCNoGTO6Z-VH7g3R2UoLEz/dl4/d5/L2dBISEvZ0FBIS9nQSEh/pw/Z7_AVEQAI930OBRD02JPMTPG21004/act/id=0/p=javax.servlet.include.path_info=QCPjspQCPbusquedaQCPBusquedaVIS_UOE.jsp/299420689304/-/"
 
 #Clase que devuelve los contratos de n ministerio entre unas fechas usando el dirver que se indique 
 class Contratos():
@@ -31,18 +32,18 @@ class Contratos():
         self.ministerio = self.ministerio + ministry
         self.fIni = fini
         self.fFin = ffin
-        self.extraecontratos()
-
-#    def extraeContratos(table):
-#        f = open('tablaContratos.txt', 'a')
-#        for row in table.findAll("tr"):
-#          f.write(row.encode("UTF-8")+ "\n")
-#        f.close()
+        self.debugPhanton()
+#        self.extraecontratos()
         
-
+    def debugPhanton(self):
+        #Carga página
+        self.driver.get(contratacionPage)
+        # check phantomjs
+        print(self.driver.page_source)
+        
     def extraecontratos(self):
         #Carga página
-        self.driver.get("https://contrataciondelestado.es/wps/portal/!ut/p/b1/lZDLDoIwEEU_aaYParssrwLxAVZQujEsjMH42Bi_30rcGCPq7CZz7pzkgoOWKC6kYBPYgDt3t37fXfvLuTs-die2PFlEUZpRlJbFSKdxXYvMrybwQOsB_DAah3xopdQh0YislqhFVUXK_0HFnvmARbwpmlLY3CDmWRpPaxKgoeI3_4jgxW_sjPhzwkRAkRhLn_mPAvqn_13wJb8GNyBjDQzAWMXjEgrz7HLaQeuxyVY3SaVzxXARLj1WlLNVaShB5LCCNoGTO6Z-VH7g3R2UoLEz/dl4/d5/L2dBISEvZ0FBIS9nQSEh/pw/Z7_AVEQAI930OBRD02JPMTPG21004/act/id=0/p=javax.servlet.include.path_info=QCPjspQCPbusquedaQCPBusquedaVIS_UOE.jsp/299420689304/-/")
+        self.driver.get(contratacionPage)
 
         #Selecciona ministerio
         self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:idSeleccionarOCLink').click()      # Organización contratante -> seleccionar
