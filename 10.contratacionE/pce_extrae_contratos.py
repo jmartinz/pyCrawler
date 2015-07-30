@@ -33,12 +33,18 @@ class Contratos():
         self.ministerio = self.ministerio + ministry
         self.fIni = fini
         self.fFin = ffin
-#        self.debugPhanton()
-        self.extraecontratos()
+        self.debugPhanton()
+#        self.extraecontratos()
         
     def debugPhanton(self):
         #Carga página
-        self.driver.get(contratacionPage)
+        self.driver.implicitly_wait(10) 
+        self.driver.set_page_load_timeout(10) 
+        try:   
+            self.driver.get(contratacionPage)
+        except TimeoutException as e:     #Handle y  
+            #Handle your exception here     
+            print(e)
         # check phantomjs
         print(self.driver.page_source)
         
@@ -46,7 +52,7 @@ class Contratos():
         #Carga página
         self.driver.implicitly_wait(10) 
         self.driver.set_page_load_timeout(10) 
-        try:   
+          try:   
             self.driver.get(contratacionPage)
         except TimeoutException as e:     #Handle y  
             #Handle your exception here     
