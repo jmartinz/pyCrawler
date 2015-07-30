@@ -44,7 +44,14 @@ class Contratos():
         
     def extraecontratos(self):
         #Carga página
-        self.driver.get(contratacionPage)
+        driver.implicitly_wait(10) 
+        driver.set_page_load_timeout(10) 
+        try:   
+            self.driver.get(contratacionPage)
+        except TimeoutException as e:     #Handle y  
+            #Handle your exception here     
+            print(e)
+        
 
         #Selecciona ministerio
         self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:idSeleccionarOCLink').click()      # Organización contratante -> seleccionar

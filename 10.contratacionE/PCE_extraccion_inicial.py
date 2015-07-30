@@ -71,11 +71,16 @@ service_args = [
     '--proxy-auth=xx:xx',
     ]    
     
-driver = webdriver.PhantomJS("/home/jmartinpit/phantomjs/bin/phantomjs",service_args=service_args)
+driver = webdriver.PhantomJS("/home/jmartinz/00.py/phantomjs/phantomjs", service_args=['--ignore-ssl-errors=true'])
 driver.set_window_size(1120, 550)
-
+driver.implicitly_wait(10) 
+driver.set_page_load_timeout(10) 
+try:   
 #Carga página
-driver.get("https://contrataciondelestado.es")
+  driver.get("https://contrataciondelestado.es")
+except TimeoutException as e:     #Handle y  
+    #Handle your exception here     
+  print(e)
 
 # check phantomjs
 print(driver.page_source)
