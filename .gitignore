@@ -1,0 +1,5 @@
+# Excluye todos los ficheros con extensión .log 
+*.log
+
+# Excluye todos los ficheros backup de joe
+*~
