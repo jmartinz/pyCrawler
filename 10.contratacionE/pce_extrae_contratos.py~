@@ -7,12 +7,11 @@ from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 import sys
 
-phantonPath = "/home/jmartinz/00.py/phantomjs/phantomjs"
 
 #Clase que devuelve los contratos de n ministerio entre unas fechas usando el dirver que se indique 
 class Contratos():
 
-    driver = webdriver.PhantomJS(phantonPath)
+    driver = webdriver.PhantomJS("/home/jmartinz/00.py/phantomjs/phantomjs")
     expedientes =[]
     ministerio = 'tafelTree_maceoArbol_id_'
     fIni= '01-01-2015'
@@ -25,7 +24,7 @@ class Contratos():
         if driverType==1:
             self.driver  = webdriver.Firefox()
         else:   
-            self.driver = webdriver.PhantomJS(phantonPath)
+            self.driver = webdriver.PhantomJS("/home/jmartinpit/phantomjs/bin/phantomjs")
             self.driver.set_window_size(1120, 550)
         
         self.ministerio = self.ministerio + ministry
