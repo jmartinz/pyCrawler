@@ -44,8 +44,8 @@ class Contratos():
         
     def extraecontratos(self):
         #Carga página
-        driver.implicitly_wait(10) 
-        driver.set_page_load_timeout(10) 
+        self.driver.implicitly_wait(10) 
+        self.driver.set_page_load_timeout(10) 
         try:   
             self.driver.get(contratacionPage)
         except TimeoutException as e:     #Handle y  
