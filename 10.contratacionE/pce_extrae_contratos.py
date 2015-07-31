@@ -90,7 +90,7 @@ class Contratos():
             # En linea saca los expedientes de la página
             html_page = self.driver.page_source
             
-            soup = BeautifulSoup(html_page)
+            soup = BeautifulSoup(html_page, "html5lib")
             
             tableExp = soup.find("table", { "id" : "myTablaBusquedaCustom" })
        
