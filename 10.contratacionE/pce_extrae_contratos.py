@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException,  TimeoutException
 from bs4 import BeautifulSoup
 import sys
 
@@ -14,7 +14,8 @@ contratacionPage="https://contrataciondelestado.es/wps/portal/!ut/p/b1/lZDLDoIwE
 #Clase que devuelve los contratos de n ministerio entre unas fechas usando el dirver que se indique 
 class Contratos():
 
-    driver = webdriver.PhantomJS(phantonPath, service_args=['--ignore-ssl-errors=true'])
+    driver = "" #webdriver.PhantomJS(phantonPath, service_args=['--ignore-ssl-errors=true'])
+    driverType=1
     expedientes =[]
     ministerio = 'tafelTree_maceoArbol_id_'
     fIni= '01-01-2015'
@@ -24,40 +25,38 @@ class Contratos():
     nPagTotal = 0
     
     def __init__(self, driverType=1, ministry='17', fini='01-01-2015',ffin='10-01-2015'):
+        self.driverType=driverType
         if driverType==1:
             self.driver  = webdriver.Firefox()
-        else:   
+        elif driverType==2:   
             self.driver = webdriver.PhantomJS(phantonPath, service_args=['--ignore-ssl-errors=true'])
             self.driver.set_window_size(1120, 550)
         
         self.ministerio = self.ministerio + ministry
         self.fIni = fini
         self.fFin = ffin
-        self.debugPhanton()
-#        self.extraecontratos()
+#        self.debugPhanton()
+        self.extraecontratos()
         
-    def debugPhanton(self):
+    def cargaPagina(self):
         #Carga página
-        self.driver.implicitly_wait(10) 
-        self.driver.set_page_load_timeout(10) 
+        if self.driverType==2:
+            self.driver.implicitly_wait(10) 
+            self.driver.set_page_load_timeout(10) 
         try:   
             self.driver.get(contratacionPage)
         except TimeoutException as e:     #Handle y  
             #Handle your exception here     
-            print(e)
+            print(e)        
+        
+    def debugPhanton(self):
+        self.cargaPagina()
         # check phantomjs
         print(self.driver.page_source)
         
     def extraecontratos(self):
-        #Carga página
-        self.driver.implicitly_wait(10) 
-        self.driver.set_page_load_timeout(10) 
-          try:   
-            self.driver.get(contratacionPage)
-        except TimeoutException as e:     #Handle y  
-            #Handle your exception here     
-            print(e)
         
+        self.cargaPagina()       
 
         #Selecciona ministerio
         self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:idSeleccionarOCLink').click()      # Organización contratante -> seleccionar
@@ -117,7 +116,7 @@ class Contratos():
 def main():
   
     # Lee la bbdd ¿con qué criterios?
-    contratosMSSSI=Contratos(driverType=2)
+    contratosMSSSI=Contratos(driverType=1)
     print(contratosMSSSI.nContratos)
     print(contratosMSSSI.nPagTotal)
 
