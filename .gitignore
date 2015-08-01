@@ -3,3 +3,6 @@
 
 # Excluye todos los ficheros backup de joe
 *~
+
+# Excluye el binario de phantonjs
+phantomjs

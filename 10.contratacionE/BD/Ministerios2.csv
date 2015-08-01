@@ -1,0 +1,29 @@
+id_ministerio,Nombre,Nombre_corto
+6,NULL,NULL
+7,NULL,NULL
+8,NULL,NULL
+9,NULL,NULL
+10,NULL,NULL
+11,NULL,NULL
+12,NULL,NULL
+13,NULL,NULL
+14,NULL,NULL
+15,NULL,NULL
+16,NULL,NULL
+17,NULL,NULL
+id_ministerio,Nombre,Nombre_corto
+6,agricultura," MAGRAMA"
+7,Exteriores," MAExCoop"
+8,Defensa,MDEfensa
+9,Economía," MINECO"
+10,Educación,MECD
+11,Empleo,MESS
+12,Fomento,MFOM
+13,NULL,MINHAP
+14,Exteriores,MINET
+15,Justicia,"MINJUS            "
+16,Presidencia,MINPRES
+17,Sanidad,MSSSI
+18,Trabajo,MinTraInm
+19,Interior,MinInt
+20,," Presidencia Gobierno"

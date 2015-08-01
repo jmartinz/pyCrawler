@@ -4,7 +4,7 @@
 
 from bs4 import BeautifulSoup
 import sys
-#import cPickle as pickle --> object serialization
+
 import peewee     #  object-relational mapper 
 from pce_db  import PceOrgano,  PceExpediente
 
@@ -12,10 +12,12 @@ from pce_db  import PceOrgano,  PceExpediente
 obtiene los datos de cada contrato"""
 class Contrato:
 
-    
-    def __init__(self, row):
-
-        # Check that row has teh correct class
+    ministry=0
+    def __init__(self, row, ministry):
+        
+        self.ministry=ministry
+        
+        # Check that row has the correct class
         if row.get("class")[0] in ['rowClass1','rowClass2']:
 
             # Buscamos los datos del expediente por la clase de columna tdExpediente
@@ -84,24 +86,25 @@ class Contrato:
                                                           fec_adj_definitiva = self.Fecha[u'AdjDefinitiva'], 
                                                           fec_adjudicacion = self.Fecha[u'FAdjudicación'], 
                                                           fec_formalizacion = self.Fecha[u'FFormalización'], 
-                                                          fec_presentacion = self.Fecha[u'Presentación']
+                                                          fec_presentacion = self.Fecha[u'Presentación'], 
+                                                          id_ministerio = self.ministry
                                                           )
         expedienteBD.save()
     
     
-    
+ # Sólo para probar que funcina        
 def main():
   
     # Lee el fichero con el html previamente guardado
     listaContratos=[]
-    exp_data = open('tablaContratos.txt','r').read()
+    exp_data = open('./Datos/tablaContratos.txt','r').read()
 
     soup = BeautifulSoup(exp_data)
      
     # Envia sólo las líneas que son de contratos 
     for row in soup.findAll("tr",  {'class': ['rowClass1', 'rowClass2']}):
         #pickle.dump(Contrato(row),  open('save.p', 'ab')) 
-        listaContratos.append(Contrato(row))
+        listaContratos.append(Contrato(row, 6))
         #print(row.prettify())
         
     for contrato in listaContratos:

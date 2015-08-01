@@ -9,6 +9,15 @@ class BaseModel(Model):
     class Meta:
         database = database
 
+class PceMinisterio(BaseModel):
+    Nombre = CharField(null=True)
+    id_ministerio = PrimaryKeyField()
+    Nombre_corto = CharField(null=True)
+
+    class Meta:
+        db_table = 'pce_ministerio'
+
+
 class PceOrgano(BaseModel):
     descripcion = CharField(null=True)
     id_organo = PrimaryKeyField()
@@ -31,6 +40,7 @@ class PceExpediente(BaseModel):
     num_expediente = CharField(null=True)
     tipo_contrato_1 = CharField(null=True)
     tipo_contrato_2 = CharField(null=True)
+    id_ministerio = ForeignKeyField(db_column='id_ministerio', null=True, rel_model=PceMinisterio, to_field='id_ministerio')
 
     class Meta:
         db_table = 'pce_expediente'
