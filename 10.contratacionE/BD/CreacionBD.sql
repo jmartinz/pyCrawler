@@ -38,6 +38,7 @@ DROP TABLE IF EXISTS `pce`.`pce_expediente` ;
 
 CREATE TABLE IF NOT EXISTS `pce`.`pce_expediente` (
   `id_expediente` INT NOT NULL AUTO_INCREMENT,
+  `id_licitacion` INT NULL COMMENT 'En los expedientes sirve para abrir el detalle del mismo.\n',
   `num_expediente` VARCHAR(45) NULL,
   `desc_expediente` VARCHAR(500) NULL,
   `tipo_contrato_1` VARCHAR(150) NULL COMMENT 'Debería ir contra tabla',

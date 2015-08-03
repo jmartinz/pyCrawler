@@ -1,7 +1,7 @@
 # coding=utf-8
 
 # -*- coding: utf-8 -*-
-
+import re
 from bs4 import BeautifulSoup
 import sys
 
@@ -24,6 +24,13 @@ class Contrato:
             expediente = row.find("td", {'class': 'tdExpediente'}).findAll('div')    
             self.num_expediente = expediente[0].text
             self.desc_expediente = expediente[1].text
+            
+            #Buscamos id_licitacion
+            enlace = expediente[0].find('a', href=True)
+            pattern = re.compile("'(\w+)':'(.*?)'")                 #http://stackoverflow.com/questions/25111752/extracting-text-using-beautifulsoup-in-python
+            fields = dict(re.findall(pattern, enlace['onclick']))
+            self.id_licitacion=int(fields['idLicitacion'])
+
 
             # Buscamos los datos del contrato por la clase de columna tdTipoContrato
             self.tiposContrato=[]
@@ -87,7 +94,8 @@ class Contrato:
                                                           fec_adjudicacion = self.Fecha[u'FAdjudicación'], 
                                                           fec_formalizacion = self.Fecha[u'FFormalización'], 
                                                           fec_presentacion = self.Fecha[u'Presentación'], 
-                                                          id_ministerio = self.ministry
+                                                          id_ministerio = self.ministry, 
+                                                          id_licitacion=self.id_licitacion
                                                           )
         expedienteBD.save()
     
@@ -97,7 +105,7 @@ def main():
   
     # Lee el fichero con el html previamente guardado
     listaContratos=[]
-    exp_data = open('./Datos/tablaContratos.txt','r').read()
+    exp_data = open('./Datos/tablaContratos_2.txt','r').read()
 
     soup = BeautifulSoup(exp_data)
      
