@@ -32,6 +32,30 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `pce`.`pce_estado`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pce`.`pce_estado` ;
+
+CREATE TABLE IF NOT EXISTS `pce`.`pce_estado` (
+  `id_estado` INT NOT NULL,
+  `descripcion` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_estado`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pce`.`pce_tipo_procedimiento`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pce`.`pce_tipo_procedimiento` ;
+
+CREATE TABLE IF NOT EXISTS `pce`.`pce_tipo_procedimiento` (
+  `id_tipo_procedimiento` INT NOT NULL,
+  `descripcion` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_tipo_procedimiento`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `pce`.`pce_expediente`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `pce`.`pce_expediente` ;
@@ -52,9 +76,13 @@ CREATE TABLE IF NOT EXISTS `pce`.`pce_expediente` (
   `fec_formalizacion` VARCHAR(45) NULL COMMENT 'Pasar a fecha',
   `fec_adj_definitiva` VARCHAR(45) NULL,
   `id_ministerio` INT NULL,
+  `id_estado` INT NULL,
+  `id_tipo_procedimiento` INT NULL,
   PRIMARY KEY (`id_expediente`),
   INDEX `fk_pce_expediente_1_idx` (`id_organo` ASC),
   INDEX `fk_pce_expediente_2_idx` (`id_ministerio` ASC),
+  INDEX `fk_pce_expediente_3_idx` (`id_estado` ASC),
+  INDEX `fk_pce_expediente_4_idx` (`id_tipo_procedimiento` ASC),
   CONSTRAINT `fk_pce_expediente_1`
     FOREIGN KEY (`id_organo`)
     REFERENCES `pce`.`pce_organo` (`id_organo`)
@@ -63,6 +91,16 @@ CREATE TABLE IF NOT EXISTS `pce`.`pce_expediente` (
   CONSTRAINT `fk_pce_expediente_2`
     FOREIGN KEY (`id_ministerio`)
     REFERENCES `pce`.`pce_ministerio` (`id_ministerio`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pce_expediente_3`
+    FOREIGN KEY (`id_estado`)
+    REFERENCES `pce`.`pce_estado` (`id_estado`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pce_expediente_4`
+    FOREIGN KEY (`id_tipo_procedimiento`)
+    REFERENCES `pce`.`pce_tipo_procedimiento` (`id_tipo_procedimiento`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
