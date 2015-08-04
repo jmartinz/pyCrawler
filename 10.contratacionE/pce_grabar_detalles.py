@@ -3,13 +3,24 @@
 # -*- coding: utf-8 -*-
 
 
-import sys
+import sys,  datetime, time 
 import peewee     #  object-relational mapper 
 from pce_db  import PceOrgano,  PceExpediente,  PceEstado,  PceTipoProcedimiento
 from pce_datos_contrato import Contrato
 from pce_extrae_detalle_contrato import detalleContrato
 
-  
+
+log_file = "GrabarDetalles.log"
+
+def log2file(log_str):
+
+    str2w = str(datetime.datetime.now()).split('.')[0] + " - " + log_str
+    f = open(log_file, 'a')
+#    print(str2w,file=f)
+    f.write(str2w)
+
+    f.close()      
+
 def grabarDetalleBD(datos_contrato, detalles):    
 
     # comprueba si existe el estado de licitación. Si es así lee el Id, si no... lo crea
@@ -29,6 +40,8 @@ def grabarDetalleBD(datos_contrato, detalles):
     # actualiza registro 
     q = PceExpediente.update(id_estado=id_estado,id_tipo_procedimiento=id_tipo_procedimiento).where(PceExpediente.id_expediente == datos_contrato.id_expediente)
     q.execute()
+    
+    return q
 
 def main():
     
@@ -36,6 +49,11 @@ def main():
 #        print ('usage: pce_grabar_detalles.py ')
 #        sys.exit(1)
 
+    # Inicia contador de tiempo
+    inicio = time.time()
+    regUpdated=0
+    regRead=0
+    
     # Lee de la BD contratos sin detalles
     contSinDet = (PceExpediente
              .select(PceExpediente.id_expediente, PceExpediente.num_expediente, PceOrgano.descripcion)
@@ -43,13 +61,26 @@ def main():
              .join(PceOrgano)
              .naive())
     
+
+    
     # Para cada uno de ellos se leen los detalles y se graban en BD    
     for contrato in contSinDet:
         detalles=detalleContrato(numExpediente = contrato.num_expediente, OrgContratacion=contrato.descripcion, driverType=2)
 
-        grabarDetalleBD(contrato, detalles)
+        regRead += 1
         
-    
+        nreg = grabarDetalleBD(contrato, detalles)
+        regUpdated += nreg
+        
+    #Excribe el número de registros leidos
+    log2file('Se han leido '+ str(regRead) +' registros de la BD.')       
+    #Excribe el número de registros actualizados
+    log2file('Se han actualizado '+ str(regUpdated) +' registros de la BD.')       
+
+    # Escribe el tiempo tardado    
+    fin = time.time()
+    tiempo_total = fin - inicio
+    log2file('El proceso tardó :'+ str(tiempo_total) +' s')    
     
 if __name__ == "__main__":
     sys.exit(main())
