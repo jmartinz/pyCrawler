@@ -37,7 +37,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `pce`.`pce_estado` ;
 
 CREATE TABLE IF NOT EXISTS `pce`.`pce_estado` (
-  `id_estado` INT NOT NULL,
+  `id_estado` INT NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NULL,
   PRIMARY KEY (`id_estado`))
 ENGINE = InnoDB;
@@ -49,7 +49,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `pce`.`pce_tipo_procedimiento` ;
 
 CREATE TABLE IF NOT EXISTS `pce`.`pce_tipo_procedimiento` (
-  `id_tipo_procedimiento` INT NOT NULL,
+  `id_tipo_procedimiento` INT NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(45) NULL,
   PRIMARY KEY (`id_tipo_procedimiento`))
 ENGINE = InnoDB;
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `pce`.`pce_expediente` (
   `num_expediente` VARCHAR(45) NULL,
   `desc_expediente` VARCHAR(500) NULL,
   `tipo_contrato_1` VARCHAR(150) NULL COMMENT 'Debería ir contra tabla',
-  `tipo_contrato_2` VARCHAR(250) NULL COMMENT 'Debería depender del anterior/ir contra tabla',
+  `tipo_contrato_2` VARCHAR(500) NULL COMMENT 'Debería depender del anterior/ir contra tabla',
   `importe` VARCHAR(45) NULL COMMENT 'Cambiar a tipo numérico',
   `estado` VARCHAR(45) NULL COMMENT 'Debería ser un id contra tabla',
   `id_organo` INT NULL,

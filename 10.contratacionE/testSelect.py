@@ -3,6 +3,7 @@ from pce_db  import PceOrgano,  PceExpediente
 
 query = (PceExpediente
          .select(PceExpediente.id_expediente, PceExpediente.num_expediente, PceOrgano.descripcion)
+         .where(PceExpediente.id_estado >> None)
          .join(PceOrgano)
          .naive())
          

@@ -21,6 +21,8 @@ class detalleContrato():
 
     driver = "" #webdriver.PhantomJS(phantonPath, service_args=['--ignore-ssl-errors=true'])
     driverType=1
+    estadoLic = ""
+    procedimiento = ""
     
     def __init__(self, numExpediente, OrgContratacion, driverType=1):
         self.driverType=driverType
@@ -79,7 +81,7 @@ class detalleContrato():
         
         # Obtiene los datos 
         self.estadoLic = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Estado').text
-        self.procediminto = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Procedimiento').text
+        self.procedimiento = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Procedimiento').text
         
         
         # Cierra el driver

@@ -30,7 +30,7 @@ data = """
 soup = BeautifulSoup(data)
 script = soup.find('script')
 
-pattern = re.compile("'(\w+)':'(.*?)'")
+pattern = re.compile("'(\w+)':'(.*?)'") 
 fields = dict(re.findall(pattern, script.text))
 #print fields['email'], fields['phone'], fields['name']
 print re.findall(pattern, script.text)
