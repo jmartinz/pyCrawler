@@ -3,7 +3,9 @@
 # -*- coding: utf-8 -*-
 
 
-import sys,  datetime, time 
+import sys
+import  datetime
+import time 
 import peewee     #  object-relational mapper 
 from pce_db  import PceOrgano,  PceExpediente,  PceEstado,  PceTipoProcedimiento
 from pce_datos_contrato import Contrato
@@ -14,7 +16,7 @@ log_file = "GrabarDetalles.log"
 
 def log2file(log_str):
 
-    str2w = str(datetime.datetime.now()).split('.')[0] + " - " + log_str
+    str2w = str(datetime.datetime.now()).split('.')[0] + " - " + log_str +"\n"
     f = open(log_file, 'a')
 #    print(str2w,file=f)
     f.write(str2w)
@@ -39,9 +41,9 @@ def grabarDetalleBD(datos_contrato, detalles):
      
     # actualiza registro 
     q = PceExpediente.update(id_estado=id_estado,id_tipo_procedimiento=id_tipo_procedimiento).where(PceExpediente.id_expediente == datos_contrato.id_expediente)
-    q.execute()
+    n = q.execute()
     
-    return q
+    return n
 
 def main():
     
@@ -73,7 +75,8 @@ def main():
         regUpdated += nreg
         
     #Excribe el número de registros leidos
-    log2file('Se han leido '+ str(regRead) +' registros de la BD.')       
+    log2file('Se han leido '+ str(regRead) +' registros de la BD.')   
+    
     #Excribe el número de registros actualizados
     log2file('Se han actualizado '+ str(regUpdated) +' registros de la BD.')       
 

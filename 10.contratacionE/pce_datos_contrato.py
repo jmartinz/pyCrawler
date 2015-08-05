@@ -97,8 +97,8 @@ class Contrato:
                                                           id_ministerio = self.ministry, 
                                                           id_licitacion=self.id_licitacion
                                                           )
-        expedienteBD.save()
-    
+        nexp = expedienteBD.save()
+        return nexp
     
  # Sólo para probar que funcina        
 def main():
