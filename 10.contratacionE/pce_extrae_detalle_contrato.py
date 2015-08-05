@@ -23,6 +23,12 @@ class detalleContrato():
     driverType=1
     estadoLic = ""
     procedimiento = ""
+    enlacelic = ''
+    codigocpv = ''
+    resultado = ''
+    adjudicatario =''
+    numlicitadores = ''
+    impadjudicacion = ''
     
     def __init__(self, numExpediente, OrgContratacion, driverType=1):
         self.driverType=driverType
@@ -70,19 +76,25 @@ class detalleContrato():
         
 
         #Obtener enlace
-#        html_page = self.driver.page_source
-#            
-#        soup = BeautifulSoup(html_page, "html5lib")
-#        row= soup.find("tr",  {'class': 'rowClass1'})
-#        
-#        exp = row.find("td", {'class': 'tdExpediente'}).findAll('div')    
-#        enlace = exp[0].find('a', href=True)
         self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:enlaceExpediente_0').click() #sólo sirve para el primer expediente... como es este caso.
         
         # Obtiene los datos 
         self.estadoLic = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Estado').text
         self.procedimiento = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Procedimiento').text
+        self.enlacelic = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_EnlaceLicPLACE').text
+        self.codigocpv = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_CPV').text
         
+        #Dependiendo del estado los siguientes elementos pueden existir o no
+        try:      
+            self.resultado = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Resultado').text
+            self.adjudicatario = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Adjudicatario').text
+            self.numlicitadores = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_NumeroLicitadores').text
+            self.impadjudicacion = self.driver.find_element_by_id(' viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_ImporteAdjudicacion').text
+        except NoSuchElementException:
+            resultado = ''
+            adjudicatario =''
+            numlicitadores = ''
+            impadjudicacion = ''
         
         # Cierra el driver
         self.driver.quit()
