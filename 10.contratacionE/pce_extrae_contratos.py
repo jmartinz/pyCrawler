@@ -9,32 +9,35 @@ import sys
 
 #phantonPath = "/home/jmartinz/00.py/phantomjs/phantomjs"
 phantonPath = "../phantomjs/phantomjs"
-contratacionPage="https://contrataciondelestado.es/wps/portal/!ut/p/b1/lZDLDoIwEEU_aaYParssrwLxAVZQujEsjMH42Bi_30rcGCPq7CZz7pzkgoOWKC6kYBPYgDt3t37fXfvLuTs-die2PFlEUZpRlJbFSKdxXYvMrybwQOsB_DAah3xopdQh0YislqhFVUXK_0HFnvmARbwpmlLY3CDmWRpPaxKgoeI3_4jgxW_sjPhzwkRAkRhLn_mPAvqn_13wJb8GNyBjDQzAWMXjEgrz7HLaQeuxyVY3SaVzxXARLj1WlLNVaShB5LCCNoGTO6Z-VH7g3R2UoLEz/dl4/d5/L2dBISEvZ0FBIS9nQSEh/pw/Z7_AVEQAI930OBRD02JPMTPG21004/act/id=0/p=javax.servlet.include.path_info=QCPjspQCPbusquedaQCPBusquedaVIS_UOE.jsp/299420689304/-/"
+contratacionPage = "https://contrataciondelestado.es/wps/portal/!ut/p/b1/lZDLDoIwEEU_aaYParssrwLxAVZQujEsjMH42Bi_30rcGCPq7CZz7pzkgoOWKC6kYBPYgDt3t37fXfvLuTs-die2PFlEUZpRlJbFSKdxXYvMrybwQOsB_DAah3xopdQh0YislqhFVUXK_0HFnvmARbwpmlLY3CDmWRpPaxKgoeI3_4jgxW_sjPhzwkRAkRhLn_mPAvqn_13wJb8GNyBjDQzAWMXjEgrz7HLaQeuxyVY3SaVzxXARLj1WlLNVaShB5LCCNoGTO6Z-VH7g3R2UoLEz/dl4/d5/L2dBISEvZ0FBIS9nQSEh/pw/Z7_AVEQAI930OBRD02JPMTPG21004/act/id=0/p=javax.servlet.include.path_info=QCPjspQCPbusquedaQCPBusquedaVIS_UOE.jsp/299420689304/-/"
 #contratacionPage="https://contrataciondelestado.es"
+""" Móudlo para extraer datos de la página de contatación
+        del estado
+"""
 
-""" Clase que devuelve los contratos de un ministerio entre unas fechas usando el dirver que se indique 
-        driverType=1 (Firefox, online) / 2(phantomjs)
-        ministry:
-            6: MAGRAMA
-            7: MAExCoop
-            8. MDEfensa
-            9: MINECO
-            10:MEDCD
-            11:MESS
-            12:MFOM
-            13:MINHAP
-            14:MINET
-            15:MINJUS            
-            16:MINPRES
-            17:MSSSI
-            18:MinTraInm
-            19:MinInt
-            20: Presidencia Gobierno
-        fini: dd-mm-aaaa
-        ffin: dd-mm-aaaa
-""" 
+
 class Contratos():
-
+    """ Clase que devuelve los contratos de un ministerio entre unas fechas usando el dirver que se indique
+            driverType=1 (Firefox, online) / 2(phantomjs)
+            ministry:
+                6: MAGRAMA
+                7: MAExCoop
+                8. MDEfensa
+                9: MINECO
+                10:MEDCD
+                11:MESS
+                12:MFOM
+                13:MINHAP
+                14:MINET
+                15:MINJUS      
+                16:MINPRES
+                17:MSSSI
+                18:MinTraInm
+                19:MinInt
+                20: Presidencia Gobierno
+            fini: dd-mm-aaaa
+            ffin: dd-mm-aaaa
+    """
     driver = "" #webdriver.PhantomJS(phantonPath, service_args=['--ignore-ssl-errors=true'])
     driverType=1
     expedientes =[]
