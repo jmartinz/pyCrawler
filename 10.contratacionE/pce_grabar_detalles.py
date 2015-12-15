@@ -4,12 +4,18 @@
 
 
 import sys
+# piece os code from https://pythonadventures.wordpress.com/tag/ascii/
+# in order to avoid error of type UnicodeEncodeError: 'ascii' codec can't encode character u'\xf3' in position 70: ordinal not in range(128)
+reload(sys)
+sys.setdefaultencoding("utf-8")
+# end piece of code
 import  datetime
 import time 
 import peewee     #  object-relational mapper 
 from pce_db  import PceOrgano,  PceExpediente,  PceEstado,  PceTipoProcedimiento
 from pce_datos_contrato import Contrato
 from pce_extrae_detalle_contrato import detalleContrato
+import traceback
 
 
 log_file = "GrabarDetalles.log"
@@ -56,6 +62,12 @@ def main():
     regUpdated=0
     regRead=0
     
+    log2file('Inicio grabar detalles.' )
+    
+    #Escribe el número de registros leidos
+    nunContSinDet = PceExpediente.select(PceExpediente.id_expediente, PceExpediente.num_expediente, PceOrgano.descripcion).where(PceExpediente.id_estado >> None).count()
+    log2file('Hay '+ str(nunContSinDet) +' contratos sin detalles.') 
+    
     # Lee de la BD contratos sin detalles
     contSinDet = (PceExpediente
              .select(PceExpediente.id_expediente, PceExpediente.num_expediente, PceOrgano.descripcion)
@@ -67,17 +79,23 @@ def main():
     
     # Para cada uno de ellos se leen los detalles y se graban en BD    
     for contrato in contSinDet:
-        detalles=detalleContrato(numExpediente = contrato.num_expediente, OrgContratacion=contrato.descripcion, driverType=2)
+        try:
+            detalles=detalleContrato(numExpediente = contrato.num_expediente, OrgContratacion=contrato.descripcion, driverType=2)
 
-        regRead += 1
+            regRead += 1
         
-        nreg = grabarDetalleBD(contrato, detalles)
-        regUpdated += nreg
-        
-    #Excribe el número de registros leidos
-    log2file('Se han leido '+ str(regRead) +' registros de la BD.')   
-    
-    #Excribe el número de registros actualizados
+            nreg = grabarDetalleBD(contrato, detalles)
+            regUpdated += nreg
+            log2file('Procesado expediente  '+ contrato.num_expediente + ' id: '+str(contrato.id_expediente))
+        except:
+            log2file('Error en expediente  '+ contrato.num_expediente + ' id: '+str(contrato.id_expediente))
+            var = traceback.format_exc()
+            log2file("Error inesperado"+ var)
+  
+    #Escribe el número de registros leidos
+    log2file('Se han leido '+ str(regRead) +' registros de la BD.')
+            
+    #Escribe el número de registros actualizados
     log2file('Se han actualizado '+ str(regUpdated) +' registros de la BD.')       
 
     # Escribe el tiempo tardado    
