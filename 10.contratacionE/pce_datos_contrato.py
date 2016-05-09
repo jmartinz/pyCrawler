@@ -101,7 +101,7 @@ class Contrato:
                                                           fec_adj_definitiva = self.Fecha.get(u'AdjDefinitiva',''),
                                                           fec_adjudicacion = self.Fecha.get(u'FAdjudicación',''),
                                                           fec_formalizacion = self.Fecha.get(u'FFormalización',''),
-                                                          fec_presentacion = self.Fecha(u'Presentación',''),
+                                                          fec_presentacion = self.Fecha.get(u'Presentación',''),
 
                                                           id_ministerio = self.ministry,
                                                           id_licitacion=self.id_licitacion
