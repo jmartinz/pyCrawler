@@ -65,12 +65,12 @@ def main():
     log2file('Inicio grabar detalles.' )
     
     #Escribe el número de registros leidos
-    nunContSinDet = PceExpediente.select(PceExpediente.id_expediente, PceExpediente.num_expediente, PceOrgano.descripcion).where(PceExpediente.id_estado >> None).count()
+    nunContSinDet = PceExpediente.select(PceExpediente.id_licitacion, PceExpediente.num_expediente, PceOrgano.descripcion).where(PceExpediente.id_estado >> None).count()
     log2file('Hay '+ str(nunContSinDet) +' contratos sin detalles.') 
     
     # Lee de la BD contratos sin detalles
     contSinDet = (PceExpediente
-             .select(PceExpediente.id_expediente, PceExpediente.num_expediente, PceOrgano.descripcion)
+             .select(PceExpediente.id_licitacion, PceExpediente.num_expediente, PceOrgano.descripcion)
              .where(PceExpediente.id_estado >> None)
              .join(PceOrgano)
              .naive())
