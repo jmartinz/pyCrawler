@@ -18,7 +18,7 @@ class detalleContrato():
             numExpediente
             OrgContratacion
             driverType=1 (Firefox, online) / 2(phantomjs)
-    """ 
+    """
     driver = ""
     driverType = 1
     estadoLic = ""
@@ -27,9 +27,9 @@ class detalleContrato():
     codigocpv = ''
     resultado = ''
     adjudicatario =''
-    numlicitadores = ''
+    numlicitadores = 0
     impadjudicacion = ''
-    
+
     def __init__(self, numExpediente, OrgContratacion, driverType=1):
         self.driverType = driverType
         self.numExpediente = numExpediente
@@ -41,7 +41,7 @@ class detalleContrato():
             self.driver.set_window_size(1120, 550)
 
         self.extraeDetalles()
-        
+
     def cargaPagina(self):
         #Carga página
         if self.driverType == 2:
@@ -52,57 +52,61 @@ class detalleContrato():
         except TimeoutException as e:     #Handle y
             #Handle your exception here
             print(e)
-        
+
     def debugPhanton(self):
         self.cargaPagina()
         # check phantomjs
         print(self.driver.page_source)
-        
+
     def extraeDetalles(self):
-        
+
         self.cargaPagina()
 
         #Introduce contrato
         contrato = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:text71ExpMAQ')
         contrato.send_keys(self.numExpediente)
-        
+
         #Introduce ´organo contrataci´on
         orgcont = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:texoorganoMAQ')
         orgcont.send_keys(self.OrgContratacion)
-        
-      
+
+
         # pulsa el botón de buscar
         self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:button1').click()
-        
+
 
         #Obtener enlace
         self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21004_:form1:enlaceExpediente_0').click() #sólo sirve para el primer expediente... como es este caso.
-        
+
         # Obtiene los datos
         self.estadoLic = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Estado').text
         self.procedimiento = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Procedimiento').text
         self.enlacelic = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_EnlaceLicPLACE').text
         self.codigocpv = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_CPV').text
-        
+
         #Dependiendo del estado los siguientes elementos pueden existir o no
         try:
             self.resultado = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Resultado').text
             self.adjudicatario = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Adjudicatario').text
-            self.numlicitadores = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_NumeroLicitadores').text
+            try:
+                self.numlicitadores = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_NumeroLicitadores').text
+            except ValueError:
+                self.numlicitadores =0
+
             self.impadjudicacion = self.driver.find_element_by_id(' viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_ImporteAdjudicacion').text
         except NoSuchElementException:
             resultado = ''
             adjudicatario =''
-            numlicitadores = ''
+            numlicitadores = 0
             impadjudicacion = ''
-        
+
         # Cierra el driver
         self.driver.quit()
-        
-        
+
+
 # Sólo para probar que funcina
 def main():
-  
+
 
     detalles=detalleContrato(numExpediente = u'2015/213/00008', OrgContratacion=u'Secretaría General de la Agencia Española de Medicamentos y Productos Sanitarios', driverType=2)
     print(detalles.estadoLic)
@@ -113,7 +117,7 @@ def main():
     print(detalles.adjudicatario)
     print(detalles.numlicitadores)
     print(detalles.impadjudicacion)
-    
+
     detalles=detalleContrato(numExpediente = u'15CO0013', OrgContratacion=u'Dirección General del Instituto de la Mujer', driverType=2)
     print(detalles.estadoLic)
     print(detalles.procedimiento)
@@ -123,7 +127,7 @@ def main():
     print(detalles.adjudicatario)
     print(detalles.numlicitadores)
     print(detalles.impadjudicacion)
-   
-    
+
+
 if __name__ == "__main__":
     sys.exit(main())
