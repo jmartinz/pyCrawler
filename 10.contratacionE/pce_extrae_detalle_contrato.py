@@ -5,6 +5,8 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException,  TimeoutException
 from bs4 import BeautifulSoup
+from datetime import datetime
+from decimal import *
 import sys
 
 #phantonPath = "/home/jmartinz/00.py/phantomjs/phantomjs"
@@ -88,27 +90,59 @@ class detalleContrato():
         try:
             self.resultado = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Resultado').text
             self.adjudicatario = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_Adjudicatario').text
+            importe_text = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_ImporteAdjudicacion').text.replace(".","").replace(",",".")
             try:
-                self.numlicitadores = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_NumeroLicitadores').text
+                self.impadjudicacion = Decimal(importe_text.strip(' "'))
+            except (ValueError, TypeError, DecimalException) as e:
+                self.impadjudicacion = 0
+            numlicitadores_text = self.driver.find_element_by_id('viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_NumeroLicitadores').text
+            try:
+                self.numlicitadores = int(numlicitadores_text)
             except ValueError:
                 self.numlicitadores =0
-
-            self.impadjudicacion = self.driver.find_element_by_id(' viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:text_ImporteAdjudicacion').text
+            print("numlic= ",self.numlicitadores)
         except NoSuchElementException:
             resultado = ''
             adjudicatario =''
             numlicitadores = 0
             impadjudicacion = ''
 
+        # En linea saca los documentos de la página
+        html_page = self.driver.page_source
+
+        soup = BeautifulSoup(html_page, "html5lib")
+
+        self.Documento={}
+        
+        for row in soup.findAll("tr",  {'class': ['rowClass1', 'rowClass2']}):
+            try:
+                fechadoc=datetime.strptime(row.find("td", {'class': 'fechaPubLeft'}).text, '%d/%m/%Y %H:%M:%S') 
+                tipodoc=row.find("td", {'class': 'tipoDocumento'}).text
+                docs = row.find("td", {'class': 'documentosPub'}).findAll('div')
+                enlacedoc = docs[0].find('a', href=True)['href']
+                self.Documento[tipodoc]=[fechadoc,enlacedoc]
+            except:    # documentos adicionales
+                try:
+                    fechadoc = datetime.strptime(row.find(id='viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:TableEx1_Aux:0:textSfecha1PadreGen').text, '%d/%m/%Y %H:%M:%S') 
+                    tipodoc = row.find(id='viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:TableEx1_Aux:0:textStipo1PadreGen').text
+                    enlace =row.find(id='viewns_Z7_AVEQAI930OBRD02JPMTPG21006_:form1:TableEx1_Aux:0:linkVerDocPadreGen')['href']
+                    self.Documento[tipodoc]=[fechadoc,enlacedoc]                
+                except:
+                    pass
+                    
+
         # Cierra el driver
         self.driver.quit()
 
 
 # Sólo para probar que funcina
-def main():
+def main(nExp,orgCon):
 
 
-    detalles=detalleContrato(numExpediente = u'2015/213/00008', OrgContratacion=u'Secretaría General de la Agencia Española de Medicamentos y Productos Sanitarios', driverType=2)
+#    detalles=detalleContrato(numExpediente = u'2015/213/00008', OrgContratacion=u'Secretaría General de la Agencia Española de Medicamentos y Productos Sanitarios', driverType=2)
+#    detalles=detalleContrato(numExpediente = u'CR0228/2012', OrgContratacion=u'Secretaría General del Instituto de Salud Carlos III', driverType=2)
+    detalles=detalleContrato(numExpediente = nExp, OrgContratacion=orgCon, driverType=2)
+
     print(detalles.estadoLic)
     print(detalles.procedimiento)
     print(detalles.enlacelic)
@@ -117,17 +151,17 @@ def main():
     print(detalles.adjudicatario)
     print(detalles.numlicitadores)
     print(detalles.impadjudicacion)
+    for docs in detalles.Documento.keys():
+        print(docs,"-",detalles.Documento[docs][0],detalles.Documento[docs][1])
 
-    detalles=detalleContrato(numExpediente = u'15CO0013', OrgContratacion=u'Dirección General del Instituto de la Mujer', driverType=2)
-    print(detalles.estadoLic)
-    print(detalles.procedimiento)
-    print(detalles.enlacelic)
-    print(detalles.codigocpv)
-    print(detalles.resultado)
-    print(detalles.adjudicatario)
-    print(detalles.numlicitadores)
-    print(detalles.impadjudicacion)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    if not len(sys.argv) == 3:
+        print ('Usage: pce_extrae_detalle_contrato.py  numExpediente orgContratacion')
+        sys.exit(1)
+
+    sys.exit(main(sys.argv[1], # TODO comprobar 1 ó 2
+                    sys.argv[2],        # TODO comprobar entre 6 y 20
+ ))
+

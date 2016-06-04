@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "pce_carga_inicial.py", line 48, in <module>
+    sys.exit(main())
+  File "pce_carga_inicial.py", line 45, in main
+    pce_Principal.main(2, str(min),ini,fin)
+  File "/home/jmartinz/00.py/pyCrawler/10.contratacionE/pce_Principal.py", line 39, in main
+    contratos=Contratos(driverType=pDT, ministry=pMin, fini=pFIni,ffin=pFFin)
+  File "/home/jmartinz/00.py/pyCrawler/10.contratacionE/pce_extrae_contratos.py", line 65, in __init__
+    self.extraecontratos()
+  File "/home/jmartinz/00.py/pyCrawler/10.contratacionE/pce_extrae_contratos.py", line 139, in extraecontratos
+    enlaceSiguiente.click()
+  File "/home/jmartinz/00.py/anaconda3/lib/python3.5/site-packages/selenium/webdriver/remote/webelement.py", line 74, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "/home/jmartinz/00.py/anaconda3/lib/python3.5/site-packages/selenium/webdriver/remote/webelement.py", line 457, in _execute
+    return self._parent.execute(command, params)
+  File "/home/jmartinz/00.py/anaconda3/lib/python3.5/site-packages/selenium/webdriver/remote/webdriver.py", line 233, in execute
+    self.error_handler.check_response(response)
+  File "/home/jmartinz/00.py/anaconda3/lib/python3.5/site-packages/selenium/webdriver/remote/errorhandler.py", line 194, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: {"errorMessage":"Click failed: timeout","request":{"headers":{"Accept":"application/json","Accept-Encoding":"identity","Connection":"close","Content-Length":"81","Content-Type":"application/json;charset=UTF-8","Host":"127.0.0.1:46540","User-Agent":"Python-urllib/3.5"},"httpVersion":"1.1","method":"POST","post":"{\"id\": \":wdc:1464465755807\", \"sessionId\": \"575d21f0-250e-11e6-b9b9-a7e6dd9e501c\"}","url":"/click","urlParsed":{"anchor":"","query":"","file":"click","directory":"/","path":"/click","relative":"/click","port":"","host":"","password":"","user":"","userInfo":"","authority":"","protocol":"","source":"/click","queryKey":{},"chunks":["click"]},"urlOriginal":"/session/575d21f0-250e-11e6-b9b9-a7e6dd9e501c/element/%3Awdc%3A1464465755807/click"}}
+Screenshot: available via screen
+

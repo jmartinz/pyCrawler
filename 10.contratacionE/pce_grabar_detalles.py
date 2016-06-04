@@ -6,13 +6,13 @@
 import sys
 # piece os code from https://pythonadventures.wordpress.com/tag/ascii/
 # in order to avoid error of type UnicodeEncodeError: 'ascii' codec can't encode character u'\xf3' in position 70: ordinal not in range(128)
-reload(sys)
-sys.setdefaultencoding("utf-8")
+#reload(sys)
+#sys.setdefaultencoding("utf-8")
 # end piece of code
 import  datetime
 import time
 import peewee     #  object-relational mapper
-from pce_db  import PceOrgano,  PceExpediente,  PceEstado,  PceTipoProcedimiento
+from pce_db  import PceOrgano,  PceExpediente,  PceEstado,  PceTipoProcedimiento, PceDocumento
 from pce_datos_contrato import Contrato
 from pce_extrae_detalle_contrato import detalleContrato
 import traceback
@@ -44,12 +44,19 @@ def grabarDetalleBD(datos_contrato, detalles):
     except PceTipoProcedimiento.DoesNotExist:
         procedimiento = PceTipoProcedimiento.create(descripcion = detalles.procedimiento)
         id_tipo_procedimiento= procedimiento.id_tipo_procedimiento
-
+    
+    # actualiza documentos
+    for docs in detalles.Documento.keys():
+        documento, created = PceDocumento.get_or_create(
+                                        id_licitacion=datos_contrato.id_licitacion,
+                                        tipo_documento = docs,
+                                        defaults={'fecha':detalles.Documento[docs][0],'documento':detalles.Documento[docs][1]})
+    
     # actualiza registro
     q = PceExpediente.update(id_estado=id_estado,
                              id_tipo_procedimiento=id_tipo_procedimiento,
                              importe_adj=detalles.impadjudicacion,
-                             enlacelic=detalles.enlacelic
+                             enlacelic=detalles.enlacelic,
                              codigocpv=detalles.codigocpv,
                              resultado=detalles.resultado,
                              adjudicatario=detalles.adjudicatario,
@@ -102,6 +109,7 @@ def main():
 
     #Escribe el número de registros leidos
     log2file('Se han leido '+ str(regRead) +' registros de la BD.')
+    print('Se han leido ', str(regRead),' registros de la BD.')
 
     #Escribe el número de registros actualizados
     log2file('Se han actualizado '+ str(regUpdated) +' registros de la BD.')

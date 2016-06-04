@@ -88,9 +88,10 @@ class Contrato:
 
  # Se comprueba si existe ya una licitación con el id, si no se crea
         try:
-            descLicitacion = PceExpediente.get(PceExpediente.id_licitacion ==self.id_licitacion).desc_expediente
-            print("licitacion ",self.id_licitacion,"-",self.num_expediente ,"ya existe con descripcion: ",descLicitacion)
-            print("La nueva descripcion seria: ",self.desc_expediente)
+            descLicitacion = PceExpediente.get(PceExpediente.id_licitacion ==self.id_licitacion).desc_expediente#
+#            print("licitacion ",self.id_licitacion,"-",self.num_expediente ,"ya existe con descripcion: ",descLicitacion)
+ #           print("La nueva descripcion seria: ",self.desc_expediente)
+            return "Licitacion "+str(self.id_licitacion)+"-"+str(self.num_expediente) +" ya existe"
         except PceExpediente.DoesNotExist:
             expedienteBD= PceExpediente.create(desc_expediente = self.desc_expediente,
                                     num_expediente = self.num_expediente, 
@@ -106,7 +107,8 @@ class Contrato:
         
         # recorre las fechas y las graba en la tabla de fechas
 #		ATENCION, se leen fechas solo para las nuevas ---> MAL, tiene que haber nuevas fehcas!!!
-            for tipoFecha in self.Fecha.iterkeys():
+#            for tipoFecha in self.Fecha.iterkeys():
+            for tipoFecha in self.Fecha.keys():
                 fechaBD = PceFecha.create(fecha = self.Fecha[tipoFecha],
                                     id_licitacion = self.id_licitacion,
                                     tipo_fecha = tipoFecha
@@ -114,7 +116,7 @@ class Contrato:
 #            	print(self.id_licitacion,":",tipoFecha,"-", self.Fecha[tipoFecha])
         
 #        return nexp
-        return 1
+        return ""
         
  # Sólo para probar que funcina
 def main():
@@ -124,7 +126,7 @@ def main():
     exp_data = open('./Datos/tablaContratos_v2.txt','r').read()
     
     soup = BeautifulSoup(exp_data, "html5lib")
-    print('Sopa hecha.')
+
     
     # Envia sólo las líneas que son de contratos
     for row in soup.findAll("tr",  {'class': ['rowClass1', 'rowClass2']}):

@@ -1,6 +1,6 @@
 from peewee import *
 
-database = MySQLDatabase('pce', **{'password': 'pce', 'user': 'pce'})
+database = MySQLDatabase('pce', **{'user': 'pce', 'password': 'pce'})
 
 class UnknownField(object):
     pass
@@ -8,13 +8,6 @@ class UnknownField(object):
 class BaseModel(Model):
     class Meta:
         database = database
-
-class PceEstado(BaseModel):
-    descripcion = CharField(null=True)
-    id_estado = PrimaryKeyField()
-
-    class Meta:
-        db_table = 'pce_estado'
 
 class PceOrgano(BaseModel):
     descripcion = CharField(null=True)
@@ -32,6 +25,13 @@ class PceMinisterio(BaseModel):
     class Meta:
         db_table = 'pce_ministerio'
 
+class PceEstado(BaseModel):
+    descripcion = CharField(null=True)
+    id_estado = PrimaryKeyField()
+
+    class Meta:
+        db_table = 'pce_estado'
+
 class PceTipoProcedimiento(BaseModel):
     descripcion = CharField(null=True)
     id_tipo_procedimiento = PrimaryKeyField()
@@ -40,7 +40,10 @@ class PceTipoProcedimiento(BaseModel):
         db_table = 'pce_tipo_procedimiento'
 
 class PceExpediente(BaseModel):
+    adjudicatario = CharField(null=True)
+    codigocpv = CharField(null=True)
     desc_expediente = CharField(null=True)
+    enlacelic = CharField(null=True)
     estado = CharField(null=True)
     id_estado = ForeignKeyField(db_column='id_estado', null=True, rel_model=PceEstado, to_field='id_estado')
     id_licitacion = PrimaryKeyField()
@@ -50,15 +53,27 @@ class PceExpediente(BaseModel):
     importe_adj = DecimalField(null=True)
     importe_base = DecimalField(null=True)
     num_expediente = CharField(null=True)
+    numlicitadores = IntegerField(null=True)
+    resultado = CharField(null=True)
     tipo_contrato_1 = CharField(null=True)
     tipo_contrato_2 = CharField(null=True)
 
     class Meta:
         db_table = 'pce_expediente'
 
+class PceDocumento(BaseModel):
+    documento = CharField(null=True)
+    fecha = DateTimeField(null=True)
+    id_licitacion = ForeignKeyField(db_column='id_licitacion', rel_model=PceExpediente, to_field='id_licitacion')
+    tipo_documento = CharField()
+
+    class Meta:
+        db_table = 'pce_documento'
+        primary_key = CompositeKey('id_licitacion', 'tipo_documento')
+
 class PceFecha(BaseModel):
     fecha = DateField(null=True)
-    id_licitacion = IntegerField()
+    id_licitacion = ForeignKeyField(db_column='id_licitacion', rel_model=PceExpediente, to_field='id_licitacion')
     tipo_fecha = CharField()
 
     class Meta:
